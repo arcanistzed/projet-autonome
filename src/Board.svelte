@@ -3,6 +3,7 @@
     import * as PE from "svelte-cannon";
     import * as THREE from "three";
     import * as SC from "svelte-cubed";
+    import DirecionalPerspectiveCamera from "./lib/DirectionalPerspectiveCamera.svelte";
 
     let width = 1,
         height = 1,
@@ -17,15 +18,11 @@
         const { key } = event;
 
         const { x, y, z } = $position;
-        if (["ArrowLeft", "a"].includes(key))
-            $position = $position.addScaledVector(1, new CANNON.Vec3(direction.z, 0, -direction.x));
-        if (["ArrowRight", "d"].includes(key))
-            $position = $position.addScaledVector(-1, new CANNON.Vec3(direction.z, 0, -direction.x));
+        if (["ArrowLeft", "a"].includes(key)) $position = $position.addScaledVector(1, new CANNON.Vec3(direction.z, 0, -direction.x));
+        if (["ArrowRight", "d"].includes(key)) $position = $position.addScaledVector(-1, new CANNON.Vec3(direction.z, 0, -direction.x));
         if ([" "].includes(key)) $position.y = Math.min(y + 1, 1);
-        if (["ArrowUp", "w"].includes(key))
-            $position = $position.addScaledVector(1, new CANNON.Vec3(direction.x, 0, direction.z));
-        if (["ArrowDown", "s"].includes(key))
-            $position = $position.addScaledVector(-1, new CANNON.Vec3(direction.x, 0, direction.z));
+        if (["ArrowUp", "w"].includes(key)) $position = $position.addScaledVector(1, new CANNON.Vec3(direction.x, 0, direction.z));
+        if (["ArrowDown", "s"].includes(key)) $position = $position.addScaledVector(-1, new CANNON.Vec3(direction.x, 0, direction.z));
     }
 
     const loader = new THREE.TextureLoader();
@@ -39,7 +36,7 @@
 
 <PE.World gravity={[0, -9.81, 0]}>
     <SC.Canvas antialias background={new THREE.Color("skyblue")} fog={new THREE.FogExp2("skyblue", 0.1)} shadows>
-        <SC.PerspectiveCamera bind:direction />
+        <DirecionalPerspectiveCamera bind:direction />
         <SC.OrbitControls maxPolarAngle={Math.PI / 2} minPolarAngle={Math.PI / 3} />
         <SC.AmbientLight intensity={0.6} />
         <SC.DirectionalLight intensity={0.6} position={[-2, 3, 2]} shadow={{ mapSize: [2048, 2048] }} />
