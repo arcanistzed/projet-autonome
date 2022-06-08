@@ -3,38 +3,38 @@
     import { afterUpdate, beforeUpdate } from "svelte";
 
     export let socket: Socket;
-    let inputValue: string,
+    let valeur: string,
         messages: string[] = [],
-        container: HTMLUListElement,
-        autoscroll: boolean;
+        contenant: HTMLUListElement,
+        défilement: boolean;
 
-    function sendMessage() {
-        if (!inputValue) return;
-        socket.emit("chat message", inputValue);
-        inputValue = "";
+    function envoyéMessage() {
+        if (!valeur) return;
+        socket.emit("message", valeur);
+        valeur = "";
     }
 
-    socket.on("chat message", msg => {
+    socket.on("message", msg => {
         messages = [...messages, msg];
     });
 
     beforeUpdate(() => {
-        autoscroll = container && container.offsetHeight + container.scrollTop > container.scrollHeight - 20;
+        défilement = contenant && contenant.offsetHeight + contenant.scrollTop > contenant.scrollHeight - 20;
     });
 
     afterUpdate(() => {
-        if (autoscroll) container.scrollTo(0, container.scrollHeight);
+        if (défilement) contenant.scrollTo(0, contenant.scrollHeight);
     });
 </script>
 
 <div>
-    <ul id="messages" bind:this={container}>
+    <ul id="messages" bind:this={contenant}>
         {#each messages as message}
             <li>{message}</li>
         {/each}
     </ul>
-    <form on:submit|preventDefault={sendMessage}>
-        <input autocomplete="off" bind:value={inputValue} />
+    <form on:submit|preventDefault={envoyéMessage}>
+        <input autocomplete="off" bind:value={valeur} />
         <button id="send">
             <i class="fa-regular fa-paper-plane fa-lg" />
         </button>
