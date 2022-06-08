@@ -9,9 +9,6 @@
 </script>
 
 <main>
-  <Board />
+  <Board {socket} />
   <Window component={Chat} title={"Chat"} {socket} />
 </main>
-
-<style>
-</style>
