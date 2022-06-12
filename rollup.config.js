@@ -1,3 +1,6 @@
+// Configuration pour le module bundler Rollup
+
+// Importer les plugins utilisé
 import svelte from "rollup-plugin-svelte";
 import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
@@ -7,56 +10,60 @@ import css from "rollup-plugin-css-only";
 import sveltePreprocess from "svelte-preprocess";
 import typescript from "@rollup/plugin-typescript";
 
+// On est en production quand on est pas en mode watch
 const production = !process.env.ROLLUP_WATCH;
 
 export default {
-  input: "src/main.ts",
-  output: {
-    sourcemap: !production,
-    format: "iife",
-    name: "app",
-    file: "public/build/bundle.js",
-  },
-  plugins: [
-    svelte({
-      preprocess: sveltePreprocess({ sourceMap: !production }),
-      compilerOptions: {
-        // enable run-time checks when not in production
-        dev: !production,
-      },
-    }),
-    // we'll extract any component CSS out into
-    // a separate file - better for performance
-    css({ output: "bundle.css" }),
+    // Le fichier d'entrer
+    input: "src/main.ts",
+    output: {
+        // Générer des sourcemaps quand on n'est pas en production
+        sourcemap: !production,
+        format: "iife",
+        name: "app",
+        // Où déposer le résultat
+        file: "public/build/bundle.js",
+    },
+    plugins: [
+        // Instructions pour compiler Svelte
+        svelte({
+            // Générer des sourcemaps quand on n'est pas en production
+            preprocess: sveltePreprocess({ sourceMap: !production }),
+            compilerOptions: {
+                // Utiliser des vérification run-time quand on n'est pas en production
+                dev: !production,
+            },
+        }),
+        // Extraire le CSS des components dans un fichier séparer
+        css({ output: "bundle.css" }),
 
-    // If you have external dependencies installed from
-    // npm, you'll most likely need these plugins. In
-    // some cases you'll need additional configuration -
-    // consult the documentation for details:
-    // https://github.com/rollup/plugins/tree/master/packages/commonjs
-    resolve({
-      browser: true,
-      dedupe: ["svelte"],
-    }),
-    commonjs(),
-    typescript({
-      sourceMap: !production,
-      inlineSources: !production,
-    }),
+        // Mode browser
+        resolve({
+            browser: true,
+            // Forcé l'utilisation des fichier locale pour Svelte
+            dedupe: ["svelte"],
+        }),
 
-    // In dev mode, call `npm run start` once
-    // the bundle has been generated
-    // !production && serve(),
+        // Convertir le code CommonJS (qui utilise `require()`) en esmodules (qui utilise `import`)
+        commonjs(),
 
-    // Watch the `public` directory and refresh the
-    // browser on changes when not in production
-    !production && livereload("public"),
+        // Compiler le TypeScript avec des sourcemaps inline quand on n'est pas en production
+        typescript({
+            sourceMap: !production,
+            inlineSources: !production,
+        }),
 
-    // If we're building for production (npm run build
-    // instead of npm run dev), minify
-    production && terser(),
-  ],
-  watch: {
-    clearScreen: false,
-  },
+        // Ne pas faire, car Express fait déjà servir les fichiers
+        // !production && serve(),
+
+        // Rechargez quand il y a des modifications dans le directoire `public`
+        !production && livereload("public"),
+
+        // Minifier le code en mode production
+        production && terser(),
+    ],
+    watch: {
+        // Garder les étaps précédent sur l'écran
+        clearScreen: false,
+    },
 };

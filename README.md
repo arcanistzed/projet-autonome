@@ -12,3 +12,5 @@ Technologies utiliser:
 -   Le framework d'applications [`svelte`](https://svelte.dev)
 -   Des fenêtres déplaçable avec [`neodrag`](https://npm.io/package/@neodrag/svelte)
 -   [`rollup.js`](https://rollupjs.org), [`nodemon`](https://nodemon.io), et [`concurrently`](https://www.npmjs.com/package/concurrently) pour servir l'application
+
+Les fichiers dans le dossier `public/build/` sont générer automatiquement et `node_modules` contient les libraries ci-dessus. Le dossier `src/custom` contient des fichiers que j'ai créer pour supplémenté les libraries.

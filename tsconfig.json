@@ -1,14 +1,21 @@
+// Configuration pour le compilateur Typescript
 {
+  // Utiliser les configurations de Svelte de base
   "extends": "@tsconfig/svelte/tsconfig.json",
+  // Inclure les fichiers dans le dossier `src`
   "include": [
     "src/**/*"
   ],
+  // Inclure les fichiers dans les dossiers `node_modules` et `public`
   "exclude": [
     "node_modules/*",
     "public/*"
   ],
+  // Des options de compilateur
   "compilerOptions": {
+    // Utilise les règles stricte
     "strict": true,
+    // Utiliser les types fournis par des libraries
     "types": [
       "svelte",
       "@neodrag/svelte/globals"
