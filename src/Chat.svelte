@@ -41,7 +41,7 @@
     </form>
 </div>
 
-<style scoped>
+<style>
     div {
         display: flex;
         flex-direction: column;
