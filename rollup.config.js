@@ -1,14 +1,15 @@
 // Configuration pour le module bundler Rollup
 
 // Importer les plugins utilisé
-import svelte from "rollup-plugin-svelte";
 import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
-import livereload from "rollup-plugin-livereload";
-import { terser } from "rollup-plugin-terser";
-import css from "rollup-plugin-css-only";
-import sveltePreprocess from "svelte-preprocess";
 import typescript from "@rollup/plugin-typescript";
+import css from "rollup-plugin-css-only";
+import execute from "rollup-plugin-execute";
+import livereload from "rollup-plugin-livereload";
+import svelte from "rollup-plugin-svelte";
+import { terser } from "rollup-plugin-terser";
+import sveltePreprocess from "svelte-preprocess";
 
 // On est en production quand on est pas en mode watch
 const production = !process.env.ROLLUP_WATCH;
@@ -56,8 +57,11 @@ export default {
         // Ne pas faire, car Express fait déjà servir les fichiers
         // !production && serve(),
 
-        // Rechargez quand il y a des modifications dans le directoire `public`
-        !production && livereload("public"),
+        // Démarrez l'application avec Node
+        !production && execute("kill-port 3000 && node index.mjs"),
+
+        // Rechargez quand il y a des modifications
+        !production && livereload(),
 
         // Minifier le code en mode production
         production && terser(),

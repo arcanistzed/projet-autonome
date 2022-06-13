@@ -11,6 +11,6 @@ Technologies utiliser:
 -   [`cannon-es`](https://pmndrs.github.io/cannon-es) via [`svelte-cannon`](https://svelte-cannon.bfanger.nl) pour les simulations physique
 -   Le framework d'applications [`svelte`](https://svelte.dev)
 -   Des fenêtres déplaçable avec [`neodrag`](https://npm.io/package/@neodrag/svelte)
--   [`rollup.js`](https://rollupjs.org), [`nodemon`](https://nodemon.io), et [`concurrently`](https://www.npmjs.com/package/concurrently) pour servir l'application
+-   [`rollup.js`](https://rollupjs.org) avec des plugins variés ainsi que [`kill-port`](https://npm.io/package/kill-port) pour servir l'application
 
 Les fichiers dans le dossier `public/build/` sont générer automatiquement et `node_modules` contient les libraries ci-dessus. Le dossier `src/custom` contient des fichiers que j'ai créer pour supplémenté les libraries.
