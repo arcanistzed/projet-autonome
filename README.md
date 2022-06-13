@@ -13,4 +13,4 @@ Technologies utiliser:
 -   Des fenêtres déplaçable avec [`neodrag`](https://npm.io/package/@neodrag/svelte)
 -   [`rollup.js`](https://rollupjs.org) avec des plugins variés ainsi que [`kill-port`](https://npm.io/package/kill-port) pour servir l'application
 
-Les fichiers dans le dossier `public/build/` sont générer automatiquement et `node_modules` contient les libraries ci-dessus. Le dossier `src/custom` contient des fichiers que j'ai créer pour supplémenté les libraries.
+Les fichiers dans le dossier `public/build/` sont générés automatiquement et `node_modules` contient les librairies ci-dessus. Le dossier `src/custom` contient des fichiers que j'ai créer pour supplémenter les librairies.
