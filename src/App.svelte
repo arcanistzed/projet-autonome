@@ -11,5 +11,5 @@
 
 <main>
     <Board {socket} />
-    <Window component={Chat} title={"Chat"} {socket} />
+    <Window component={Chat} title={"Chat"} {socket} inset={"auto 0.5rem 0.5rem auto"} width={"30%"}/>
 </main>

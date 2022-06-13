@@ -1,8 +1,12 @@
+<script context="module">
+    const couleur = Math.floor(Math.random() * 360);
+</script>
+
 <script lang="ts">
     import type { Socket } from "socket.io-client";
     import type { Message } from "./global";
     import { afterUpdate, beforeUpdate } from "svelte";
-
+    
     export let socket: Socket;
     let valeur: string,
         messages: Message[] = [],
