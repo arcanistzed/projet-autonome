@@ -20,7 +20,7 @@
         if (document.activeElement?.matches("input")) return;
         keys.add(key);
 
-        // Ajoute 180 car l'angle est entre -180 et 180
+        // Trouvé le quadrant de l'angle du camera en degré
         const quadrant = Math.round(((Math.atan2(direction?.x, direction?.z) * 180) / Math.PI + 90) / 90),
             SIN = Math.sin((quadrant * Math.PI) / 2),
             COS = Math.cos((quadrant * Math.PI) / 2);
@@ -73,6 +73,7 @@
             enablePan={false}
             enableDamping={true}
             dampingFactor={0.5}
+            target={[0, 1, 0,]}
         />
         <SC.AmbientLight intensity={0.5} />
         <SC.DirectionalLight intensity={0.8} position={[-2, 3, 2]} shadow={{ mapSize: [2048, 2048] }} />
@@ -109,4 +110,3 @@
         </PE.Body>
     </SC.Canvas>
 </PE.World>
-
