@@ -1,8 +1,8 @@
 <script lang="ts">
     import { io } from "socket.io-client";
 
-    import Board from "./Board.svelte";
-    import Window from "./Window.svelte";
+    import Jeu from "./Jeu.svelte";
+    import Fenetre from "./Fenetre.svelte";
     import Chat from "./Chat.svelte";
 
     // Créer une nouvelle instance de Socket.IO sur le client
@@ -10,6 +10,6 @@
 </script>
 
 <main>
-    <Board {socket} />
-    <Window component={Chat} title={"Chat"} {socket} inset={"auto 0.5rem 0.5rem auto"} width={"30%"}/>
+    <Jeu {socket} />
+    <Fenetre component={Chat} titre={"Chat"} {socket} inset={"auto 0.5rem 0.5rem auto"} largeur={"30%"}/>
 </main>

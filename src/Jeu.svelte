@@ -7,7 +7,8 @@
     import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
     import DirectionalPerspectiveCamera from "./custom/DirectionalPerspectiveCamera.svelte";
     import ContactMaterial from "./custom/ContactMaterial.svelte";
-    import Window from "./Window.svelte";
+    import Fenetre from "./Fenetre.svelte";
+    import Aide from "./Aide.svelte";
 
     export let socket: Socket;
 
@@ -24,14 +25,14 @@
 
         // Ajoute 180 car l'angle est entre -180 et 180
         const quadrant = Math.round(((Math.atan2(direction?.x, direction?.z) * 180) / Math.PI + 90) / 90),
-            SIN = Math.sin(quadrant * Math.PI / 2),
-            COS = Math.cos(quadrant * Math.PI / 2);
-        
+            SIN = Math.sin((quadrant * Math.PI) / 2),
+            COS = Math.cos((quadrant * Math.PI) / 2);
+
         let Δ = new CANNON.Vec3();
-        if (keys.has("ArrowLeft")  || keys.has("a")) Δ.set(SIN, 0, COS);
+        if (keys.has("ArrowLeft") || keys.has("a")) Δ.set(SIN, 0, COS);
         if (keys.has("ArrowRight") || keys.has("d")) Δ.set(-SIN, 0, -COS);
-        if (keys.has("ArrowUp")    || keys.has("w")) Δ.set(-COS, 0, SIN);
-        if (keys.has("ArrowDown")  || keys.has("s")) Δ.set(COS, 0, -SIN);
+        if (keys.has("ArrowUp") || keys.has("w")) Δ.set(-COS, 0, SIN);
+        if (keys.has("ArrowDown") || keys.has("s")) Δ.set(COS, 0, -SIN);
         if (keys.has(" ") && Number($position.y.toFixed(3)) == 0) Δ.set(0, 1, 0);
         socket.emit("mouvement", Δ);
     }
@@ -48,17 +49,14 @@
     floorTexture.wrapT = THREE.RepeatWrapping;
     floorTexture.repeat.set(10, 10);
 
-    // Model 3d du pawn
+    // Model 3d du pion
     const objLoader = new GLTFLoader();
     let model: THREE.BufferGeometry;
-    objLoader.load(
-        "assets/pawn.glb",
-        ({scene}) => {
-            // @ts-expect-error
-            model = scene.children.at(-1)!.geometry;
-            model.scale(0.5, 0.5, 0.5);
-        }
-    );
+    objLoader.load("assets/pion.glb", ({ scene }) => {
+        // @ts-expect-error
+        model = scene.children.at(-1)!.geometry;
+        model.scale(0.5, 0.5, 0.5);
+    });
 
     // Appliqué les mouvement survenu sur les autres clients
     socket.on("mouvement", (Δ: CANNON.Vec3) => {
@@ -90,13 +88,16 @@
                 rotation={[-Math.PI / 2, 0, 0]}
                 receiveShadow
             />
-            <SC.Primitive object={new THREE.GridHelper(50 * grandeur, 50 * grandeur, "saddlebrown", "sienna")} position={[0.5, 0.001, 0.5]} />
+            <SC.Primitive
+                object={new THREE.GridHelper(50 * grandeur, 50 * grandeur, "saddlebrown", "sienna")}
+                position={[0.5, 0.001, 0.5]}
+            />
         </SC.Group>
         <PE.Body rotation={[-Math.PI / 2, 0, 0]} position={[0, -grandeur, 0]}>
             <PE.Plane />
         </PE.Body>
 
-        <!-- Pawn -->
+        <!-- Pion -->
         <SC.Group scale={[grandeur, grandeur, grandeur]}>
             <SC.Mesh
                 geometry={model}
@@ -112,6 +113,29 @@
     </SC.Canvas>
 </PE.World>
 
-<Window title="Configuration">
-    <input type="color" bind:value={color}>
-</Window>
+<Fenetre titre="Configuration" fixé={true}>
+    <input type="color" bind:value={color} />
+    <Aide />
+</Fenetre>
+
+<style>
+    input {
+        background: none;
+        border: none;
+        transition: 250ms;
+        padding: 0;
+        vertical-align: middle;
+        height: 2rem;
+        display: inline-flex;
+        align-items: center;
+        min-width: 5rem;
+        gap: 0.5rem;
+    }
+
+    input::after {
+        content: "\f1fb";
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        font-size: 1rem;
+    }
+</style>

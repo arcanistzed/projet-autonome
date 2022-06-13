@@ -35,12 +35,12 @@
 <div>
     <ul id="messages" bind:this={contenant}>
         {#each messages as message}
-            <li style={`background-color: hsla(${message.couleur}, 100%, 75%, 100%);`} class:external={message.couleur === couleur}>{message.valeur}</li>
+            <li style={`background-color: hsla(${message.couleur}, 100%, 75%, 100%);`} class:externe={message.couleur === couleur}>{message.valeur}</li>
         {/each}
     </ul>
     <form on:submit|preventDefault={envoyéMessage}>
         <input autocomplete="off" bind:value={valeur} />
-        <button id="send">
+        <button id="envoyer">
             <i class="fa-regular fa-paper-plane fa-lg" />
         </button>
     </form>
@@ -72,15 +72,15 @@
         outline: none;
     }
 
-    #send {
+    #envoyer {
         background: none;
         border: none;
         outline: none;
         border-radius: 0.5em;
     }
 
-    #send:hover,
-    #send:focus {
+    #envoyer:hover,
+    #envoyer:focus {
         background-color: hsla(0, 0%, 100%, 0.25);
     }
 
@@ -104,7 +104,7 @@
         margin: 0 10% 0 0;
     }
 
-    #messages > li.external {
+    #messages > li.externe {
         border-radius: 1em 1em 0 1em;
         margin: 0 0 0 10%;
     }

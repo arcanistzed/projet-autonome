@@ -5,52 +5,52 @@
     import { draggable } from "@neodrag/svelte";
 
     export let component: (new (...args: any) => SvelteComponentTyped) | null = null,
-        title = "Window",
-        fixed = false,
+        titre = "Window",
+        fixé = false,
         inset = "auto",
-        width = "unset",
-        height = "unset",
+        largeur = "unset",
+        hauteur = "unset",
         socket: Socket | null = null;
 
-    let minimized = false,
-        closed = false;
+    let minimizer = false,
+        fermer = false;
 
     function minimize() {
-        minimized = !minimized;
+        minimizer = !minimizer;
     }
 
-    function close() {
-        closed = !closed;
+    function ferme() {
+        fermer = !fermer;
     }
 </script>
 
-{#if !closed}
-    {#if fixed}
-        <section class="fixed" style={`inset: ${inset}; width: ${width}; height: ${height}`}>
-            <h1>{title}</h1>
+{#if !fermer}
+    {#if fixé}
+        <dialog class="fixé" style={`inset: ${inset}; width: ${largeur}; height: ${hauteur}`}>
+            <h1>{titre}</h1>
             <svelte:component this={component} {socket} />
             <slot />
-        </section>
+        </dialog>
     {:else}
-        <section use:draggable={{ bounds: "body" }} style={`inset: ${inset}; width: ${width}; height: ${height}`}>
+        <dialog use:draggable={{ bounds: "body" }} style={`inset: ${inset}; width: ${largeur}; height: ${hauteur}`}>
             <header>
-                <h1>{title}</h1>
+                <h1>{titre}</h1>
                 <button on:click={minimize}>
-                    <i class="fa-regular fa-fw {minimized ? 'fa-window-maximize' : 'fa-window-minimize'}" />
+                    <i class="fa-regular fa-fw {minimizer ? 'fa-window-maximize' : 'fa-window-minimize'}" />
                 </button>
-                <button on:click={close}><i class="fas fa-close fa-fw" /></button>
+                <button on:click={ferme}><i class="fas fa-close fa-fw" /></button>
             </header>
 
-            {#if !minimized}
+            {#if !minimizer}
                 <svelte:component this={component} {socket} />
                 <slot />
             {/if}
-        </section>
+        </dialog>
     {/if}
 {/if}
 
 <style>
-    section {
+    dialog {
         position: absolute;
         backdrop-filter: blur(50px);
         background-color: hsla(0, 0%, 100%, 0.5);
@@ -58,10 +58,14 @@
         border-radius: 0.5em;
         color: black;
         box-shadow: 0 0 10px hsla(0, 0%, 10%, 25%);
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        border: none;
     }
 
-    .fixed {
-        border-radius: 0;
+    .fixé {
+        margin: 0.5rem;
     }
 
     header {
