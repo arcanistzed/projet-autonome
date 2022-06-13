@@ -4,7 +4,7 @@
     import { color } from "./stores";
 </script>
 
-<Fenetre titre="Configuration" fixé={true}>
+<Fenetre titre="Configuration">
     <input type="color" bind:value={$color} />
     <Aide />
 </Fenetre>

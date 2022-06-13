@@ -15,5 +15,5 @@
     <Jeu {socket} />
     <Navigation />
     <Configuration />
-    <Fenetre component={Chat} titre={"Chat"} {socket} inset={"auto 0.5rem 0.5rem auto"} largeur={"30%"}/>
+    <Fenetre component={Chat} titre={"Chat"} {socket} inset={"auto 0 0 auto"} largeur={"30%"}/>
 </main>

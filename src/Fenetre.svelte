@@ -6,7 +6,6 @@
 
     export let component: (new (...args: any) => SvelteComponentTyped) | null = null,
         titre = "Window",
-        fixé = false,
         inset = "auto",
         largeur = "unset",
         hauteur = "unset",
@@ -25,28 +24,20 @@
 </script>
 
 {#if !fermer}
-    {#if fixé}
-        <dialog class="fixé" style={`inset: ${inset}; width: ${largeur}; height: ${hauteur}`}>
+    <dialog use:draggable={{ bounds: "body" }} style={`inset: ${inset}; width: ${largeur}; height: ${hauteur}`}>
+        <header>
             <h1>{titre}</h1>
+            <button on:click={minimize}>
+                <i class="fa-regular fa-fw {minimizer ? 'fa-window-maximize' : 'fa-window-minimize'}" />
+            </button>
+            <button on:click={ferme}><i class="fas fa-close fa-fw" /></button>
+        </header>
+
+        {#if !minimizer}
             <svelte:component this={component} {socket} />
             <slot />
-        </dialog>
-    {:else}
-        <dialog use:draggable={{ bounds: "body" }} style={`inset: ${inset}; width: ${largeur}; height: ${hauteur}`}>
-            <header>
-                <h1>{titre}</h1>
-                <button on:click={minimize}>
-                    <i class="fa-regular fa-fw {minimizer ? 'fa-window-maximize' : 'fa-window-minimize'}" />
-                </button>
-                <button on:click={ferme}><i class="fas fa-close fa-fw" /></button>
-            </header>
-
-            {#if !minimizer}
-                <svelte:component this={component} {socket} />
-                <slot />
-            {/if}
-        </dialog>
-    {/if}
+        {/if}
+    </dialog>
 {/if}
 
 <style>
@@ -62,9 +53,6 @@
         flex-direction: column;
         gap: 0.5rem;
         border: none;
-    }
-
-    .fixé {
         margin: 0.5rem;
     }
 
