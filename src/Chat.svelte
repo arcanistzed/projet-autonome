@@ -1,21 +1,22 @@
 <script lang="ts">
     import type { Socket } from "socket.io-client";
+    import type { Message } from "./global";
     import { afterUpdate, beforeUpdate } from "svelte";
 
     export let socket: Socket;
     let valeur: string,
-        messages: string[] = [],
+        messages: Message[] = [],
         contenant: HTMLUListElement,
         défilement: boolean;
 
     function envoyéMessage() {
         if (!valeur) return;
-        socket.emit("message", valeur);
+        socket.emit("message", {couleur, valeur});
         valeur = "";
     }
 
-    socket.on("message", msg => {
-        messages = [...messages, msg];
+    socket.on("message", message => {
+        messages = [...messages, message];
     });
 
     beforeUpdate(() => {
@@ -30,7 +31,7 @@
 <div>
     <ul id="messages" bind:this={contenant}>
         {#each messages as message}
-            <li>{message}</li>
+            <li style={`background-color: hsla(${message.couleur}, 100%, 75%, 100%);`} class:external={message.couleur === couleur}>{message.valeur}</li>
         {/each}
     </ul>
     <form on:submit|preventDefault={envoyéMessage}>
@@ -84,16 +85,23 @@
         margin: 0;
         padding: 0;
         height: 10em;
-        overflow-y: auto;
+        overflow-y: scroll;
         word-break: break-all;
+        border-radius: 1em;
+        box-shadow: inset 0 0 5px hsla(0, 0%, 10%, 25%);
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
     }
 
     #messages > li {
-        padding: 0.5em 0.5em;
-        border-radius: 1em 1em 0 1em;
+        padding: 0.5em;
+        border-radius: 1em 1em 1em 0;
+        margin: 0 10% 0 0;
     }
 
-    #messages > li:nth-child(odd) {
-        background-color: hsla(0, 0%, 100%, 0.1);
+    #messages > li.external {
+        border-radius: 1em 1em 0 1em;
+        margin: 0 0 0 10%;
     }
 </style>

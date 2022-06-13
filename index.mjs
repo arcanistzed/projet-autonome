@@ -20,19 +20,19 @@ io.on("connection", socket => {
     console.log(`Un utilisateur vient de se connecter à partir de ${socket.handshake.headers["x-forwarded-for"]})`);
 
     // Lors de la reception d'événements "message" chat
-    socket.on("message", msg => {
-        console.log(`message: ${msg}`);
+    socket.on("message", (/** @type {import("./src/global").Message} */ message) => {
+        console.log(`message: ${message.valeur}`);
 
         // Envoyé le message à tous les clients
-        io.emit("message", msg);
+        io.emit("message", message);
     });
 
     // Lors de la reception d'événements "mouvement"
-    socket.on("mouvement", mv => {
-        console.log(`mouvement:`, mv);
+    socket.on("mouvement", (/** @type {import("cannon-es").Vec3} */ Δ) => {
+        console.log(`mouvement:`, Δ);
 
-        // Envoyé le mouvement à tous les autres clients
-        socket.broadcast.emit("mouvement", mv);
+        // Envoyé le delta de mouvement à tous les clients
+        io.emit("mouvement", Δ);
     });
 
     // Lors de la déconnection
@@ -43,5 +43,5 @@ io.on("connection", socket => {
 
 // Démarrez le serveur
 server.listen(3000, () => {
-    console.log("Serveur démarrez sur le port 3000!");
+    console.log("\x1b[4;32m", "Serveur démarrez sur le port 3000!", "\x1b[0m");
 });

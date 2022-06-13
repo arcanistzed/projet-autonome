@@ -49,9 +49,9 @@
         }
     });
 
-    socket.on("mouvement", (mv: CANNON.Vec3) => {
-        console.log(mv);
-        $position = mv;
+    // Appliqué les mouvement survenu sur les autres clients
+    socket.on("mouvement", (Δ: CANNON.Vec3) => {
+        $position = $position.addScaledVector(1, Δ);
     });
 </script>
 
