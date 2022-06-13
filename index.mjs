@@ -27,6 +27,14 @@ io.on("connection", socket => {
         io.emit("message", message);
     });
 
+    // Indicateur d'écriture
+    socket.on("écriture", utilisateurs => {
+        console.log(`Un utilisateur est en train d'écrire...`);
+
+        // Envoyé le à tous les autres clients
+        socket.broadcast.emit("écriture", utilisateurs);
+    });
+
     // Lors de la reception d'événements "mouvement"
     socket.on("mouvement", (/** @type {import("cannon-es").Vec3} */ Δ) => {
         console.log(`mouvement:`, Δ);
