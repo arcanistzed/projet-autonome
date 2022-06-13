@@ -6,14 +6,11 @@
     import * as SC from "svelte-cubed";
     import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
     import DirectionalPerspectiveCamera from "./custom/DirectionalPerspectiveCamera.svelte";
-    import ContactMaterial from "./custom/ContactMaterial.svelte";
-    import Fenetre from "./Fenetre.svelte";
-    import Aide from "./Aide.svelte";
+    import { color } from "./stores";
 
     export let socket: Socket;
 
     let grandeur = 1,
-        color: string = "#8a0000",
         position = PE.writableVec3(0, 0, 0),
         direction: THREE.Vector3 & CANNON.Vec3;
 
@@ -101,7 +98,7 @@
         <SC.Group scale={[grandeur, grandeur, grandeur]}>
             <SC.Mesh
                 geometry={model}
-                material={new THREE.MeshStandardMaterial({ color })}
+                material={new THREE.MeshStandardMaterial({ color: $color })}
                 position={$position.toArray()}
                 castShadow
                 receiveShadow
@@ -113,29 +110,3 @@
     </SC.Canvas>
 </PE.World>
 
-<Fenetre titre="Configuration" fixé={true}>
-    <input type="color" bind:value={color} />
-    <Aide />
-</Fenetre>
-
-<style>
-    input {
-        background: none;
-        border: none;
-        transition: 250ms;
-        padding: 0;
-        vertical-align: middle;
-        height: 2rem;
-        display: inline-flex;
-        align-items: center;
-        min-width: 5rem;
-        gap: 0.5rem;
-    }
-
-    input::after {
-        content: "\f1fb";
-        font-family: "Font Awesome 6 Free";
-        font-weight: 900;
-        font-size: 1rem;
-    }
-</style>
