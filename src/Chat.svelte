@@ -146,7 +146,7 @@
         margin: 0 0 0 10%;
     }
 
-    small {
+    li small {
         opacity: 0.5;
         position: absolute;
         bottom: -1rem;
