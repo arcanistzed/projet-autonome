@@ -4,7 +4,7 @@
         <li><a href="https://le-jeu-de-la-musique.netlify.app" target="_blank">Écriture</a></li>
         <li><a href="https://defilement-infinis.netlify.app" target="_blank">Défilement Infinis</a></li>
         <li><a href="drag-and-drop/">Drag & Drop</a></li>
-        <li><a href="chronometre.html" target="_blank">Chronomètre</a></li>
+        <li><a href="https://chronometre.netlify.app" target="_blank">Chronomètre</a></li>
         <li><a href="https://arcanist.me" target="_blank">Site</a></li>
     </ul>
 </nav>
