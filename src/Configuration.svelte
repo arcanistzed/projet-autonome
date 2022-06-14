@@ -1,11 +1,12 @@
 <script lang="ts">
     import Fenetre from "./Fenetre.svelte";
     import Aide from "./Aide.svelte";
-    import { color } from "./stores";
+    import { couleur, nom } from "./stores";
 </script>
 
 <Fenetre titre="Configuration">
-    <input type="color" bind:value={$color} />
+    <label>Couleur <input type="color" bind:value={$couleur} /></label>
+    <label>Nom <input type="text" bind:value={$nom} /></label>
     <Aide />
 </Fenetre>
 
@@ -14,13 +15,20 @@
         background: none;
         border: none;
         transition: 250ms;
-        padding: 0;
         vertical-align: middle;
-        height: 2rem;
         display: inline-flex;
         align-items: center;
-        min-width: 5rem;
+        width: 100%;
         gap: 0.5rem;
+    }
+
+    input[type=color] {
+        padding: 0;
+        height: 2rem;
+    }
+
+    input[type=text] {
+        border-bottom: 1px solid black;
     }
 
     input::after {

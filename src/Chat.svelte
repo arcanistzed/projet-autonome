@@ -1,37 +1,39 @@
-<script context="module">
-    const couleur = Math.floor(Math.random() * 360);
-    const uuid = crypto.randomUUID();
-</script>
-
 <script lang="ts">
     import type { Socket } from "socket.io-client";
     import type { Message } from "./global";
     import { afterUpdate, beforeUpdate } from "svelte";
+    import { nom } from "./stores";
+
+    const couleur = Math.floor(Math.random() * 360);
 
     export let socket: Socket;
     let valeur: string,
         messages: Message[] = [],
         contenant: HTMLUListElement,
         défilement: boolean,
-        utilisateurs: Set<string> = new Set();
+        utilisateurs: string[] = [];
 
     // Envoyé un nouveau message au serveur
     function envoyéMessage() {
         if (!valeur) return;
-        socket.emit("message", { couleur, valeur });
+        socket.emit("message", { couleur, valeur, nom: $nom });
         valeur = "";
     }
 
-    // Afficher le nom des utilisateurs qui sont en train d'écrire
+    // Partager ceux qui écrivent avec les autres clients
     function écriture(écrit: boolean) {
-        écrit ? utilisateurs.add(uuid) : utilisateurs.delete(uuid);
-        utilisateurs = utilisateurs; // Invalidé l'état pour mettre à jour l'interface
-        socket.emit("écriture", utilisateurs); // Partagé avec les autres clients
+        socket.emit("écriture", $nom, écrit);
     }
 
     // Ajouter les messages reçu à partir du serveur
-    socket.on("message", message => {
+    socket.on("message", (message: Message) => {
         messages = [...messages, message];
+    });
+
+    // Mettre à jour les utilisateurs à partir du serveur
+    socket.on("écriture", (u: string[]) => {
+        utilisateurs = u;
+        console.log(utilisateurs);
     });
 
     // Avant la mise à jour, prendre la position de défilement
@@ -43,6 +45,13 @@
     afterUpdate(() => {
         if (défilement) contenant.scrollTo(0, contenant.scrollHeight);
     });
+
+    // Enlever le nom précedent quand c'est changer
+    nom.subscribe(() => {
+        socket.emit("écriture", $nom, false);
+    });
+
+    const formatter = new Intl.ListFormat("fr-CA", { style: 'long', type: 'conjunction' });
 </script>
 
 <div>
@@ -53,13 +62,15 @@
                 class:externe={message.couleur === couleur}
             >
                 {message.valeur}
+                <small>{message.nom}</small>
             </li>
         {/each}
     </ul>
-    {#if utilisateurs.size > 0}
+    {#if utilisateurs.length > 0}
         <small>
-            {[...utilisateurs.values()].join(", ")}
-            {utilisateurs.size === 1 ? "est" : "sont"} en train d'écrire &hellip;
+            {formatter.format(utilisateurs)}
+            {utilisateurs.length === 1 ? "est" : "sont"} en train d'écrire
+            &hellip;
         </small>
     {/if}
     <form on:submit|preventDefault={envoyéMessage}>
@@ -112,25 +123,33 @@
         list-style-type: none;
         margin: 0;
         padding: 0;
-        height: 12em;
+        height: 15em;
         overflow-y: scroll;
         scroll-snap-type: y proximity;
         word-break: break-all;
         border-radius: 1em;
         display: flex;
         flex-direction: column;
-        gap: 0.25rem;
+        gap: 1.75rem;
     }
 
-    #messages > li {
+    li {
         padding: 0.5em;
         border-radius: 1em 1em 1em 0;
         margin: 0 10% 0 0;
         scroll-snap-align: start;
+        position: relative;
     }
 
-    #messages > li.externe {
+    li.externe {
         border-radius: 1em 1em 0 1em;
         margin: 0 0 0 10%;
+    }
+
+    small {
+        opacity: 0.5;
+        position: absolute;
+        bottom: -1rem;
+        right: 0.5rem;
     }
 </style>

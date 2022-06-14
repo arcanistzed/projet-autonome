@@ -6,7 +6,7 @@
     import * as SC from "svelte-cubed";
     import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
     import DirectionalPerspectiveCamera from "./custom/DirectionalPerspectiveCamera.svelte";
-    import { color } from "./stores";
+    import { couleur } from "./stores";
 
     export let socket: Socket;
 
@@ -99,7 +99,7 @@
         <SC.Group scale={[grandeur, grandeur, grandeur]}>
             <SC.Mesh
                 geometry={model}
-                material={new THREE.MeshStandardMaterial({ color: $color })}
+                material={new THREE.MeshStandardMaterial({ color: $couleur })}
                 position={$position.toArray()}
                 castShadow
                 receiveShadow

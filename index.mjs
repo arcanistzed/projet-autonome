@@ -15,24 +15,29 @@ const io = new Server(server);
 // Utiliser les fichier static dans le directoire `public`
 app.use(express.static("public"));
 
+const utilisateurs = new Set();
+
 // Lors d'une connection au Socket
 io.on("connection", socket => {
     console.log(`Un utilisateur vient de se connecter à partir de ${socket.handshake.headers["x-forwarded-for"]})`);
 
     // Lors de la reception d'événements "message" chat
     socket.on("message", (/** @type {import("./src/global").Message} */ message) => {
-        console.log(`message: ${message.valeur}`);
+        console.log(`${message.nom} a envoyé un message ${message.valeur}`);
 
         // Envoyé le message à tous les clients
         io.emit("message", message);
     });
 
-    // Indicateur d'écriture
-    socket.on("écriture", utilisateurs => {
-        console.log(`Un utilisateur est en train d'écrire...`);
+    // Partager avec tous le nom de ceux qui écrivent
+    socket.on("écriture", (nom, écrit) => {
+        console.log(`${nom} ${écrit ? "est" : "n'est pas"} en train d'écrire...`, utilisateurs);
 
-        // Envoyé le à tous les autres clients
-        socket.broadcast.emit("écriture", utilisateurs);
+        // Mettre à jour les utilisateurs
+        écrit ? utilisateurs.add(nom) : utilisateurs.delete(nom);
+
+        // Envoyé à tous les clients
+        io.emit("écriture", [...utilisateurs.values()]);
     });
 
     // Lors de la reception d'événements "mouvement"
