@@ -15,7 +15,7 @@
   "dependencies": {
     "@neodrag/svelte": "^1.1.4",
     "express": "^4.18.1",
-    "socket.io": "^4.5.1",
+    "socket.io": "^4.6.1",
     "svelte": "^3.49.0",
     "svelte-cannon": "^0.8.0",
     "svelte-cubed": "^0.2.1",
